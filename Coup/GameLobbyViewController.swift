@@ -13,13 +13,17 @@ class GameLobbyViewController: UIViewController, UITableViewDelegate, UITableVie
 {
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
-    var joinedPeers = [MCPeerID]()
-    var foundPeers = [MCPeerID]()
-    
     @IBOutlet weak var tblPeers: UITableView!
+    
+    var foundPeersOnTable = Array<MCPeerID>()
+    var acceptedPeersOnTable = Array<MCPeerID>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.foundPeersOnTable = appDelegate.mpcManager.foundPeers
+        
+        NotificationCenter.default.addObserver(self, selector:#selector(self.startGameFromPeerMessage), name: Notification.Name(rawValue: "startGame"), object: nil)
         
         self.appDelegate.mpcManager.delegate = self
         
@@ -38,9 +42,9 @@ class GameLobbyViewController: UIViewController, UITableViewDelegate, UITableVie
         switch section
         {
             case 0:
-                return self.foundPeers.count
+                return self.foundPeersOnTable.count
             case 1:
-                return self.joinedPeers.count
+                return self.acceptedPeersOnTable.count
             default:
                 return 0
         }
@@ -53,9 +57,9 @@ class GameLobbyViewController: UIViewController, UITableViewDelegate, UITableVie
         switch indexPath.section
         {
             case 0:
-                cell.textLabel?.text = "Found: " + foundPeers[indexPath.row].displayName
+                cell.textLabel?.text = "Found: " + self.foundPeersOnTable[indexPath.row].displayName
             case 1:
-                cell.textLabel?.text = "Joined: " + joinedPeers[indexPath.row].displayName
+                cell.textLabel?.text = "Joined: " + self.acceptedPeersOnTable[indexPath.row].displayName
             default:
                 break
         }
@@ -63,81 +67,116 @@ class GameLobbyViewController: UIViewController, UITableViewDelegate, UITableVie
         return cell
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section
+        {
+            case 0:
+                return "Found Peers"
+            case 1:
+                return "Joined Peers"
+            default:
+                return "Peers"
+        }
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60.0
     }
     
-    // MARK: Peer Delagate Calls
-    
-    func foundPeer(peerID: MCPeerID) {
-        OperationQueue.main.addOperation { () -> Void in
-            if !self.joinedPeers.contains(peerID)
-            {
-                self.foundPeers.append(peerID)
-                self.tblPeers.reloadData()
-            }
-        }
-        
-        self.appDelegate.mpcManager.browser.invitePeer(peerID, to: self.appDelegate.mpcManager.session, withContext: nil, timeout: 20)
-    }
-    
-    func lostPeer(peerID: MCPeerID) {
-        OperationQueue.main.addOperation { () -> Void in
-            if self.foundPeers.index(of: peerID) != nil
-            {
-                self.foundPeers.remove(at: self.foundPeers.index(of: peerID)!)
-            }
-            self.tblPeers.reloadData()
-        }
-    }
-    
-    func invitationWasReceived(fromPeer: String) {
-        //Accept Invite Automatically
-        //if !joinedPeers.contains(MCPeerID(displayName: fromPeer))
-        //{
-            print("Accepted Invitation From " + fromPeer)
-            self.appDelegate.mpcManager.invitationHandler(true, self.appDelegate.mpcManager.session)
-        //}
-    }
-    
-    func connectedWithPeer(peerID: MCPeerID) {
-        //self.appDelegate.mpcManager.advertiser.stopAdvertisingPeer()
-        //self.appDelegate.mpcManager.browser.stopBrowsingForPeers()
-        print("Connected With " + peerID.displayName)
-        OperationQueue.main.addOperation { () -> Void in
-            self.joinedPeers.append(peerID)
-            if self.foundPeers.index(of: peerID) != nil
-            {
-                self.foundPeers.remove(at: self.foundPeers.index(of: peerID)!)
-            }
-            self.tblPeers.reloadData()
-        }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        //Invite the peer when selected
+        print("CoupGame-GameLobbyViewController: Inviting " + appDelegate.mpcManager.foundPeers[indexPath.row].displayName)
+        appDelegate.mpcManager.browser.invitePeer(appDelegate.mpcManager.foundPeers[indexPath.row], to: appDelegate.mpcManager.session, withContext: nil, timeout: 20)
     }
     
     @IBAction func refreshTable(_ sender: Any)
     {
         OperationQueue.main.addOperation { () -> Void in
-            for peer in self.joinedPeers
-            {
-                if !self.appDelegate.mpcManager.session.connectedPeers.contains(peer)
-                {
-                    self.joinedPeers.remove(at: self.joinedPeers.index(of: peer)!)
-                }
-            }
             self.tblPeers.reloadData()
-            
-            self.foundPeers.removeAll()
-            for peer in self.appDelegate.mpcManager.foundPeers
-            {
-                if !self.joinedPeers.contains(peer)
-                {
-                    self.foundPeers.append(peer)
-                    self.tblPeers.reloadData()
-                    
-                    self.appDelegate.mpcManager.invitationHandler(true, self.appDelegate.mpcManager.session)
-                }
-            }
+        }
+    }
+    
+    // MARK: Peer Delagate Calls
+    
+    func foundPeer(peerID: MCPeerID)
+    {
+        //If the peer is not already on the table, add it
+        if !self.foundPeersOnTable.contains(peerID)
+        {
+            self.foundPeersOnTable.append(peerID)
+        }
+        
+        OperationQueue.main.addOperation { () -> Void in
+            self.tblPeers.reloadData()
+        }
+    }
+    
+    func lostPeer(peerID: MCPeerID)
+    {
+        //If the peer is on the table, remove it
+        if self.foundPeersOnTable.contains(peerID)
+        {
+            self.foundPeersOnTable.remove(at: foundPeersOnTable.index(of: peerID)!)
+        }
+        
+        OperationQueue.main.addOperation { () -> Void in
+            self.tblPeers.reloadData()
+        }
+    }
+    
+    func invitationWasReceived(fromPeer: String)
+    {
+        //Accept by default
+        print("CoupGame-GameLobbyViewController: Accepting Invitation from " + fromPeer)
+        appDelegate.mpcManager.invitationHandler(true, appDelegate.mpcManager.session)
+    }
+    
+    func connectedWithPeer(peerID: MCPeerID)
+    {
+        print("CoupGame-GameLobbyViewController: Connected With " + peerID.displayName)
+        
+        //If the peer was on the "found" section, remove it, and add it to the accepted section if not already added
+        if self.foundPeersOnTable.contains(peerID)
+        {
+            self.foundPeersOnTable.remove(at: foundPeersOnTable.index(of: peerID)!)
+        }
+        
+        if !self.acceptedPeersOnTable.contains(peerID)
+        {
+            self.acceptedPeersOnTable.append(peerID)
+        }
+        
+        OperationQueue.main.addOperation { () -> Void in
+            self.tblPeers.reloadData()
+        }
+    }
+    
+    //MARK: Segue to CardDealView
+    @IBAction func startGameButtonPressed(_ sender: Any)
+    {
+        self.performSegue(withIdentifier: "startingGame", sender: self)
+        
+        var startGameDictionary = Dictionary<String,AnyObject>()
+        startGameDictionary.updateValue("startGame" as AnyObject, forKey: "message")
+        if !appDelegate.mpcManager.sendData(dictionaryWithData: startGameDictionary)
+        {
+            print("CoupGame-GameLobbyViewController: Error: startGame message could not be sent")
+        }
+    }
+    
+    @objc func startGameFromPeerMessage()
+    {
+        OperationQueue.main.addOperation { () -> Void in
+            self.performSegue(withIdentifier: "startingGame", sender: self)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+        if segue.identifier == "startingGame"
+        {
+            //Any setup before starting game...
         }
     }
 }
