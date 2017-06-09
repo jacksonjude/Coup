@@ -1,5 +1,5 @@
 //
-//  GameLobbyViewController.swift
+//  PeerTableViewController.swift
 //  Coup
 //
 //  Created by jackson on 6/6/17.
@@ -9,7 +9,7 @@
 import UIKit
 import MultipeerConnectivity
 
-class GameLobbyViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MPCManagerDelegate
+class PeerTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PlayerManagerDelegate
 {
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
@@ -20,15 +20,15 @@ class GameLobbyViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.foundPeersOnTable = appDelegate.mpcManager.foundPeers
-        
+                
         NotificationCenter.default.addObserver(self, selector:#selector(self.startGameFromPeerMessage), name: Notification.Name(rawValue: "startGame"), object: nil)
         
-        self.appDelegate.mpcManager.delegate = self
+        self.foundPeersOnTable = appDelegate.playerManager.foundPeers
         
-        self.appDelegate.mpcManager.browser.startBrowsingForPeers()
-        self.appDelegate.mpcManager.advertiser.startAdvertisingPeer()
+        appDelegate.playerManager.delegate = self
+        
+        appDelegate.playerManager.browser.startBrowsingForPeers()
+        appDelegate.playerManager.advertiser.startAdvertisingPeer()
     }
     
     // MARK: UITableView related method implementation
@@ -86,8 +86,8 @@ class GameLobbyViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         //Invite the peer when selected
-        print("CoupGame-GameLobbyViewController: Inviting " + appDelegate.mpcManager.foundPeers[indexPath.row].displayName)
-        appDelegate.mpcManager.browser.invitePeer(appDelegate.mpcManager.foundPeers[indexPath.row], to: appDelegate.mpcManager.session, withContext: nil, timeout: 20)
+        print("CoupGame-GameLobbyViewController: Inviting " + appDelegate.playerManager.foundPeers[indexPath.row].displayName)
+        appDelegate.playerManager.browser.invitePeer(appDelegate.playerManager.foundPeers[indexPath.row], to: appDelegate.playerManager.session, withContext: nil, timeout: 20)
     }
     
     @IBAction func refreshTable(_ sender: Any)
@@ -129,7 +129,7 @@ class GameLobbyViewController: UIViewController, UITableViewDelegate, UITableVie
     {
         //Accept by default
         print("CoupGame-GameLobbyViewController: Accepting Invitation from " + fromPeer)
-        appDelegate.mpcManager.invitationHandler(true, appDelegate.mpcManager.session)
+        appDelegate.playerManager.invitationHandler(true, appDelegate.playerManager.session)
     }
     
     func connectedWithPeer(peerID: MCPeerID)
@@ -159,9 +159,9 @@ class GameLobbyViewController: UIViewController, UITableViewDelegate, UITableVie
         
         var startGameDictionary = Dictionary<String,AnyObject>()
         startGameDictionary.updateValue("startGame" as AnyObject, forKey: "message")
-        if !appDelegate.mpcManager.sendData(dictionaryWithData: startGameDictionary)
+        if !appDelegate.playerManager.sendData(dictionaryWithData: startGameDictionary)
         {
-            print("CoupGame-GameLobbyViewController: Error: startGame message could not be sent")
+            print("CoupGame-PeerTableViewController: Error: startGame message could not be sent")
         }
     }
     

@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		7A50C68D1EE87F8400985EEB /* CardDealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C41EE87BD90092C132 /* CardDealViewController.swift */; };
 		7A50C68E1EE87F8700985EEB /* CardDealManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C51EE87BDC0092C132 /* CardDealManager.swift */; };
-		7A50C68F1EE87F8900985EEB /* GameLobbyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C21EE87BC80092C132 /* GameLobbyViewController.swift */; };
-		7A50C6901EE87F8B00985EEB /* MPCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C11EE87BBA0092C132 /* MPCManager.swift */; };
-		7A50C6911EE87F8E00985EEB /* MPCDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C01EE87BBA0092C132 /* MPCDataManager.swift */; };
+		7A50C68F1EE87F8900985EEB /* PeerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C21EE87BC80092C132 /* PeerTableViewController.swift */; };
+		7A50C6901EE87F8B00985EEB /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C11EE87BBA0092C132 /* PlayerManager.swift */; };
 		7A50C6921EE87F9000985EEB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C31EE87BCB0092C132 /* HomeViewController.swift */; };
 		7A99D1CB1EE683EF005988DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A99D1CA1EE683EF005988DD /* AppDelegate.swift */; };
 		7A99D1D01EE683EF005988DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A99D1CE1EE683EF005988DD /* Main.storyboard */; };
@@ -20,9 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7A1E43C01EE87BBA0092C132 /* MPCDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPCDataManager.swift; sourceTree = "<group>"; };
-		7A1E43C11EE87BBA0092C132 /* MPCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MPCManager.swift; sourceTree = "<group>"; };
-		7A1E43C21EE87BC80092C132 /* GameLobbyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLobbyViewController.swift; sourceTree = "<group>"; };
+		7A1E43C11EE87BBA0092C132 /* PlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
+		7A1E43C21EE87BC80092C132 /* PeerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeerTableViewController.swift; sourceTree = "<group>"; };
 		7A1E43C31EE87BCB0092C132 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HomeViewController.swift; path = Coup/HomeViewController.swift; sourceTree = SOURCE_ROOT; };
 		7A1E43C41EE87BD90092C132 /* CardDealViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDealViewController.swift; sourceTree = "<group>"; };
 		7A1E43C51EE87BDC0092C132 /* CardDealManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDealManager.swift; sourceTree = "<group>"; };
@@ -45,12 +43,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7A1E43B71EE876420092C132 /* Title */ = {
+		7A1E43B71EE876420092C132 /* Home */ = {
 			isa = PBXGroup;
 			children = (
 				7A1E43B81EE876720092C132 /* ViewControllers */,
 			);
-			name = Title;
+			name = Home;
 			sourceTree = "<group>";
 		};
 		7A1E43B81EE876720092C132 /* ViewControllers */ = {
@@ -64,8 +62,7 @@
 		7A74F8501EE72A7F00992127 /* Connection */ = {
 			isa = PBXGroup;
 			children = (
-				7A1E43C11EE87BBA0092C132 /* MPCManager.swift */,
-				7A1E43C01EE87BBA0092C132 /* MPCDataManager.swift */,
+				7A1E43C11EE87BBA0092C132 /* PlayerManager.swift */,
 				7A74F8511EE72AA100992127 /* ViewControllers */,
 			);
 			name = Connection;
@@ -74,7 +71,7 @@
 		7A74F8511EE72AA100992127 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				7A1E43C21EE87BC80092C132 /* GameLobbyViewController.swift */,
+				7A1E43C21EE87BC80092C132 /* PeerTableViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -115,7 +112,7 @@
 		7A99D1C91EE683EF005988DD /* Coup */ = {
 			isa = PBXGroup;
 			children = (
-				7A1E43B71EE876420092C132 /* Title */,
+				7A1E43B71EE876420092C132 /* Home */,
 				7A74F8501EE72A7F00992127 /* Connection */,
 				7A74F8561EE73B4C00992127 /* Game */,
 				7A99D1CA1EE683EF005988DD /* AppDelegate.swift */,
@@ -202,9 +199,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A50C68D1EE87F8400985EEB /* CardDealViewController.swift in Sources */,
-				7A50C68F1EE87F8900985EEB /* GameLobbyViewController.swift in Sources */,
-				7A50C6911EE87F8E00985EEB /* MPCDataManager.swift in Sources */,
-				7A50C6901EE87F8B00985EEB /* MPCManager.swift in Sources */,
+				7A50C68F1EE87F8900985EEB /* PeerTableViewController.swift in Sources */,
+				7A50C6901EE87F8B00985EEB /* PlayerManager.swift in Sources */,
 				7A99D1CB1EE683EF005988DD /* AppDelegate.swift in Sources */,
 				7A50C6921EE87F9000985EEB /* HomeViewController.swift in Sources */,
 				7A50C68E1EE87F8700985EEB /* CardDealManager.swift in Sources */,

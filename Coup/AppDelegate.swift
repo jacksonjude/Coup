@@ -7,16 +7,17 @@
 //
 
 import UIKit
+import MultipeerConnectivity
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var mpcManager: MPCManager!
+    var playerManager: PlayerManager!
+    var playerOrder: Array<MCPeerID>!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        mpcManager = MPCManager()
         
         return true
     }

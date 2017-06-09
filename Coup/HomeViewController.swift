@@ -22,6 +22,7 @@ class HomeViewController: UIViewController {
         if segue.identifier == "startingSearch"
         {
             //Any setup before starting game search...
+            appDelegate.playerManager = PlayerManager()
         }
     }
     
@@ -33,19 +34,12 @@ class HomeViewController: UIViewController {
     @IBAction func exitGameView(_ segue: UIStoryboardSegue)
     {
         print("CoupGame-HomeViewController: Exiting Game...")
-        if segue.source is GameLobbyViewController
+        if segue.source is PeerTableViewController
         {
-            let viewController = segue.source as! GameLobbyViewController
-            viewController.acceptedPeersOnTable = []
-            viewController.foundPeersOnTable = []
-            
-            appDelegate.mpcManager.browser.stopBrowsingForPeers()
-            appDelegate.mpcManager.advertiser.stopAdvertisingPeer()
-            appDelegate.mpcManager.acceptedPeers = []
-            appDelegate.mpcManager.invitationHandler = nil
-            appDelegate.mpcManager.session.delegate = nil
-            appDelegate.mpcManager.session.disconnect()
-        }
+            let peerTableViewController = segue.source as! PeerTableViewController
+            peerTableViewController.acceptedPeersOnTable = []
+            peerTableViewController.foundPeersOnTable = []
+        }        
     }
 }
 

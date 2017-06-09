@@ -52,17 +52,17 @@
                         </constraints>
                     </view>
                     <connections>
-                        <segue destination="JkA-B6-Ivm" kind="showDetail" identifier="startingSearch" id="EOi-Om-Zdy"/>
+                        <segue destination="JkA-B6-Ivm" kind="showDetail" identifier="startingSearch" id="sTh-tN-48a"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="669.60000000000002" y="130.88455772113943"/>
         </scene>
-        <!--Game Lobby View Controller-->
+        <!--Peer Table View Controller-->
         <scene sceneID="Eah-Mz-74a">
             <objects>
-                <viewController id="JkA-B6-Ivm" customClass="GameLobbyViewController" customModule="Coup" sceneMemberID="viewController">
+                <viewController id="JkA-B6-Ivm" customClass="PeerTableViewController" customModule="Coup" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="j4l-A9-1ua"/>
                         <viewControllerLayoutGuide type="bottom" id="vSz-sp-6y2"/>
@@ -123,7 +123,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" red="0.81963241100311279" green="0.81963241100311279" blue="0.81963241100311279" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.69857914027772416" green="0.69857914027772416" blue="0.69857914027772416" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="feP-Nf-Nfk" firstAttribute="top" secondItem="j4l-A9-1ua" secondAttribute="bottom" id="1cg-bv-q8Z"/>
                             <constraint firstItem="vSz-sp-6y2" firstAttribute="top" secondItem="CDG-jm-Eq5" secondAttribute="bottom" id="3G4-YQ-eXv"/>
@@ -200,26 +200,45 @@
                                     <outlet property="delegate" destination="JZP-hy-LcW" id="7ma-oK-uL7"/>
                                 </connections>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KB8-Zc-2NL">
-                                <rect key="frame" x="164" y="20" width="46" height="38"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KB8-Zc-2NL">
+                                <rect key="frame" x="16" y="20" width="46" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="46" id="7AM-47-oei"/>
+                                    <constraint firstAttribute="height" constant="38" id="q3W-6B-vTN"/>
+                                </constraints>
                                 <state key="normal" title="Roll"/>
                                 <connections>
                                     <action selector="rollDiceButtonPressed:" destination="JZP-hy-LcW" eventType="touchUpInside" id="qiF-nH-9hQ"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="omf-TE-QEe">
+                                <rect key="frame" x="159" y="20" width="57" height="38"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="57" id="GHv-4A-ZXq"/>
+                                    <constraint firstAttribute="height" constant="38" id="htR-57-4Tb"/>
+                                </constraints>
+                                <state key="normal" title="Deal"/>
+                                <connections>
+                                    <action selector="dealCardsButtonPressed:" destination="JZP-hy-LcW" eventType="touchUpInside" id="Io5-ho-lXB"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.82028303924619839" green="0.82028303924619839" blue="0.82028303924619839" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.69808030128479004" green="0.69808030128479004" blue="0.69808030128479004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
+                            <constraint firstItem="omf-TE-QEe" firstAttribute="centerX" secondItem="cZt-jp-ERM" secondAttribute="centerX" id="AJ5-kD-8Om"/>
                             <constraint firstItem="h0E-vb-Xfw" firstAttribute="centerX" secondItem="cZt-jp-ERM" secondAttribute="centerX" id="AgO-83-X7D"/>
+                            <constraint firstItem="omf-TE-QEe" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" id="C9O-tg-QX7"/>
                             <constraint firstItem="P8e-cu-pte" firstAttribute="centerX" secondItem="cZt-jp-ERM" secondAttribute="centerX" id="Ews-Lr-xB7"/>
                             <constraint firstItem="P8e-cu-pte" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" constant="46" id="Mi0-Po-AAy"/>
                             <constraint firstItem="h0E-vb-Xfw" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" constant="46" id="RNl-fI-maW"/>
                             <constraint firstItem="efL-mT-4bJ" firstAttribute="trailing" secondItem="cZt-jp-ERM" secondAttribute="trailingMargin" id="YR9-z2-J2F"/>
+                            <constraint firstItem="KB8-Zc-2NL" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" id="gnf-AB-A7t"/>
                             <constraint firstItem="efL-mT-4bJ" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" id="pIu-fP-uH1"/>
+                            <constraint firstItem="KB8-Zc-2NL" firstAttribute="centerX" secondItem="cZt-jp-ERM" secondAttribute="centerX" constant="-148.5" id="q2A-Wz-7NM"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="dealCardsButton" destination="omf-TE-QEe" id="wiq-G5-NYz"/>
                         <outlet property="tblDiceRolls" destination="h0E-vb-Xfw" id="Tj1-Uw-Ydw"/>
                     </connections>
                 </viewController>

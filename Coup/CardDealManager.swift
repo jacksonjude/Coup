@@ -15,18 +15,27 @@ class CardDealManager: NSObject
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     var playerDiceRolls = Dictionary<Int,MCPeerID>()
-    var viewController: CardDealViewController!
+    var cardDealViewController: CardDealViewController!
     
     var playerOrder = Array<MCPeerID>()
+    
+    var myPeerID: MCPeerID!
+    var playerCount: Int!
     
     init(viewController: CardDealViewController)
     {
         super.init()
         
-        self.viewController = viewController
+        self.cardDealViewController = viewController
+        
+        self.myPeerID = appDelegate.playerManager.peer
+        self.playerCount = appDelegate.playerManager.acceptedPeers.count+1
         
         NotificationCenter.default.addObserver(self, selector:#selector(self.receivedDiceRoll), name: Notification.Name(rawValue: "receivedDiceRoll"), object: nil)
+        NotificationCenter.default.addObserver(self, selector:#selector(self.dealCards), name: Notification.Name(rawValue: "dealCards"), object: nil)
     }
+    
+    //MARK: Player Ordering
     
     func rollDice()
     {
@@ -37,17 +46,17 @@ class CardDealManager: NSObject
         diceRollDictionary.updateValue("diceRoll" as AnyObject, forKey: "message")
         diceRollDictionary.updateValue(diceRoll as AnyObject, forKey: "roll")
         
-        self.playerDiceRolls.updateValue(appDelegate.mpcManager.peer, forKey: self.diceRoll)
+        self.playerDiceRolls.updateValue(myPeerID, forKey: self.diceRoll)
         
         print("CoupGame-CardDealManager: You rolled a " + String(self.diceRoll))
-        viewController.displayDiceRoll(peerName: appDelegate.mpcManager.peer, roll: self.diceRoll)
+        cardDealViewController.displayDiceRoll(peerName: myPeerID, roll: self.diceRoll)
         
-        if !appDelegate.mpcManager.sendData(dictionaryWithData: diceRollDictionary) //Send the data and handle any errors
+        if !appDelegate.playerManager.sendData(dictionaryWithData: diceRollDictionary) //Send the data and handle any errors
         {
             print("CoupGame-CardDealManager: Error: diceRoll Data could not be sent")
         }
         
-        if self.playerDiceRolls.values.count == appDelegate.mpcManager.acceptedPeers.count+1
+        if self.playerDiceRolls.values.count == playerCount
         {
             self.findPlayerOrder()
         }
@@ -65,10 +74,10 @@ class CardDealManager: NSObject
         
         //print to log and display dice roll on table view
         print("CoupGame-CardDealManager: " + peerID.displayName + " rolled a " + String(receivedDiceRoll))
-        viewController.displayDiceRoll(peerName: peerID, roll: receivedDiceRoll)
+        cardDealViewController.displayDiceRoll(peerName: peerID, roll: receivedDiceRoll)
         
         //If all peers have rolled plus self, determine dealer and player order by highest dice roll to lowest dice roll
-        if self.playerDiceRolls.values.count == appDelegate.mpcManager.acceptedPeers.count+1
+        if self.playerDiceRolls.values.count == playerCount
         {
             self.findPlayerOrder()
         }
@@ -77,7 +86,7 @@ class CardDealManager: NSObject
     func findPlayerOrder()
     {
         //Until player order contains all peers + self
-        while self.playerOrder.count != self.appDelegate.mpcManager.acceptedPeers.count+1
+        while self.playerOrder.count != playerCount
         {
             //Add the highest diceRoll player to the player order
             self.playerOrder.append(self.playerDiceRolls[self.playerDiceRolls.keys.max()!]!)
@@ -86,27 +95,35 @@ class CardDealManager: NSObject
         }
         
         print("CoupGame-CardDealManager: playerOrder is:" + String(describing: playerOrder))
+        print("CoupGame-CardDealManager: " + playerOrder.first!.displayName + " is the dealer")
         
-        print("CoupGame-CardDealManager:" + playerOrder.first!.displayName + " is the dealer")
+        appDelegate.playerOrder = self.playerOrder
         
+        self.cardDealViewController.enableDealButton()
+    }
+    
+    //MARK: Card Deal
+    
+    func dealCardsButtonPressed()
+    {
+        self.dealCards()
         
-        UIView.transition(with: self.viewController.tblDiceRolls, duration: 0.25, options: .transitionCrossDissolve, animations: {
-            self.viewController.tblDiceRolls.isHidden = true
-        }, completion: { (finishedTransition) in
-            if !finishedTransition
-            {
-                print("CoupGame-CardDealManager: Error: tblDiceRolls could not fade out")
-            }
-        })
-        
-        if playerOrder.first == appDelegate.mpcManager.peer
+        var dealCardsDictionary = Dictionary<String,AnyObject>()
+        dealCardsDictionary.updateValue("dealCards" as AnyObject, forKey: "message")
+        if !appDelegate.playerManager.sendData(dictionaryWithData: dealCardsDictionary)
         {
-            self.dealCards()
+            print("CoupGame-CardDealManager: Error: Deal Cards message could not be sent")
         }
     }
     
-    func dealCards()
+    @objc func dealCards()
     {
+        self.cardDealViewController.disableDealButton()
+        self.cardDealViewController.hideDiceRollTableView()
         
+        if appDelegate.playerOrder.first == myPeerID
+        {
+            
+        }
     }
 }

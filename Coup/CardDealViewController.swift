@@ -14,18 +14,23 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
     var cardDealManager: CardDealManager!
     
     @IBOutlet weak var tblDiceRolls: UITableView!
+    @IBOutlet weak var dealCardsButton: UIButton!
     
     var diceRollInfo = Array<String>()
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        self.disableDealButton()
+        
         self.cardDealManager = CardDealManager(viewController: self)
     }
     
+    //MARK: Player Ordering
+    
     func displayDiceRoll(peerName: MCPeerID, roll: Int)
     {
-        let diceRoll = peerName.displayName + " rolled a " + String(roll)
+        let diceRoll = String(roll) + " - " + peerName.displayName
         
         diceRollInfo.append(diceRoll)
         
@@ -41,8 +46,42 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
         {
             let rollDiceButton = sender as! UIButton
             rollDiceButton.isEnabled = false
-            rollDiceButton.tintColor = UIColor.gray
         }
+    }
+    
+    func hideDiceRollTableView()
+    {
+        OperationQueue.main.addOperation { () -> Void in
+            UIView.transition(with: self.tblDiceRolls, duration: 2, options: .transitionCrossDissolve, animations: {
+                self.tblDiceRolls.isHidden = true
+            }, completion: { (finishedTransition) in
+                if !finishedTransition
+                {
+                    print("CoupGame-CardDealViewController: Error: tblDiceRolls could not fade out")
+                }
+            })
+        }
+    }
+    
+    //MARK: Card Deal
+    
+    func enableDealButton()
+    {
+        OperationQueue.main.addOperation { () -> Void in
+            self.dealCardsButton.isEnabled = true
+        }
+    }
+    
+    func disableDealButton()
+    {
+        OperationQueue.main.addOperation { () -> Void in
+            self.dealCardsButton.isEnabled = false
+        }
+    }
+    
+    @IBAction func dealCardsButtonPressed(_ sender: Any)
+    {
+        self.cardDealManager.dealCardsButtonPressed()
     }
     
     //MARK: UITableView related method implementation

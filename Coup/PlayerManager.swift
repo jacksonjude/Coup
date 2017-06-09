@@ -1,5 +1,5 @@
 //
-//  MPCManager.swift
+//  PlayerManager.swift
 //  Coup
 //
 //  Created by jackson on 6/6/17.
@@ -9,7 +9,7 @@
 import UIKit
 import MultipeerConnectivity
 
-protocol MPCManagerDelegate {
+protocol PlayerManagerDelegate {
     func foundPeer(peerID: MCPeerID)
     
     func lostPeer(peerID: MCPeerID)
@@ -19,7 +19,7 @@ protocol MPCManagerDelegate {
     func connectedWithPeer(peerID: MCPeerID)
 }
 
-class MPCManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdvertiserDelegate
+class PlayerManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, MCNearbyServiceAdvertiserDelegate
 {
     var session: MCSession!
     var peer: MCPeerID!
@@ -31,8 +31,7 @@ class MPCManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, M
     
     var invitationHandler: ((Bool, MCSession?)->Void)!
     
-    var delegate: MPCManagerDelegate?
-    var dataManager: MPCDataManager!
+    var delegate: PlayerManagerDelegate?
     
     override init()
     {
@@ -49,13 +48,11 @@ class MPCManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, M
         
         advertiser = MCNearbyServiceAdvertiser(peer: peer, discoveryInfo: nil, serviceType: "coup-game")
         advertiser.delegate = self
-        
-        self.dataManager = MPCDataManager()
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         foundPeers.append(peerID)
-        print("CoupGame-MPCManager: Found Peer!")
+        print("CoupGame-PlayerManager: Found Peer!")
         
         delegate?.foundPeer(peerID: peerID)
     }
@@ -73,7 +70,7 @@ class MPCManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, M
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
-        print("CoupGame-MPCManager: " + error.localizedDescription)
+        print("CoupGame-PlayerManager: " + error.localizedDescription)
     }
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping ((Bool, MCSession?) -> Void)) {
@@ -83,29 +80,29 @@ class MPCManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, M
     }
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
-        print("CoupGame-MPCManager: " + error.localizedDescription)
+        print("CoupGame-PlayerManager: " + error.localizedDescription)
     }
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         switch state
         {
         case MCSessionState.connected:
-            print("CoupGame-MPCManager: Connected to session: \(session)")
+            print("CoupGame-PlayerManager: Connected to session: \(session)")
             
             self.acceptedPeers.append(peerID)
             delegate?.connectedWithPeer(peerID: peerID)
         case MCSessionState.connecting:
-            print("CoupGame-MPCManager: Connecting to session: \(session)")
+            print("CoupGame-PlayerManager: Connecting to session: \(session)")
             
         default:
-            print("CoupGame-MPCManager: Did not connect to session: \(session)")
+            print("CoupGame-PlayerManager: Did not connect to session: \(session)")
             //Re-Invite if connection fails
             self.browser.invitePeer(peerID, to: self.session, withContext: nil, timeout: 20)
         }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        self.dataManager.receivedData(data, fromPeer: peerID)
+        self.handleReceivedData(data, fromPeer: peerID)
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
@@ -133,9 +130,44 @@ class MPCManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, M
         }
         catch
         {
-            print("CoupGame-MPCManager: Error: Data failed to send")
+            print("CoupGame-PlayerManager: Error: Data failed to send")
         }
         
         return true
+    }
+    
+    func handleReceivedData(_ data: Data, fromPeer peerID: MCPeerID)
+    {
+        let dataDictionary = NSKeyedUnarchiver.unarchiveObject(with: data) as! Dictionary<String,AnyObject>
+        let message = dataDictionary["message"]! as! String
+        
+        switch message
+        {
+            case "startGame":
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "startGame"), object: nil)
+            case "diceRoll":
+                let diceRoll = dataDictionary["roll"]! as! Int
+                
+                var receivedDiceRollDictionary = Dictionary<String,AnyObject>()
+                receivedDiceRollDictionary.updateValue(diceRoll as AnyObject, forKey: "roll")
+                receivedDiceRollDictionary.updateValue(peerID, forKey: "peerID")
+                
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "receivedDiceRoll"), object: receivedDiceRollDictionary)
+            case "dealCards":
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "dealCards"), object: nil)
+            default:
+                break
+        }
+    }
+    
+    func clearPlayerManagerData()
+    {
+        self.browser.stopBrowsingForPeers()
+        self.advertiser.stopAdvertisingPeer()
+        
+        self.acceptedPeers.removeAll()
+        
+        self.session.delegate = nil
+        self.session.disconnect()
     }
 }
