@@ -31,6 +31,14 @@ class PeerTableViewController: UIViewController, UITableViewDelegate, UITableVie
         appDelegate.playerManager.advertiser.startAdvertisingPeer()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.acceptedPeersOnTable.removeAll()
+        self.foundPeersOnTable.removeAll()
+        
+        appDelegate.playerManager.browser.stopBrowsingForPeers()
+        appDelegate.playerManager.advertiser.stopAdvertisingPeer()
+    }
+    
     // MARK: UITableView related method implementation
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -159,7 +167,7 @@ class PeerTableViewController: UIViewController, UITableViewDelegate, UITableVie
         
         var startGameDictionary = Dictionary<String,AnyObject>()
         startGameDictionary.updateValue("startGame" as AnyObject, forKey: "message")
-        if !appDelegate.playerManager.sendData(dictionaryWithData: startGameDictionary)
+        if !appDelegate.playerManager.sendData(dictionaryWithData: startGameDictionary, toPeers: appDelegate.playerManager.acceptedPeers)
         {
             print("CoupGame-PeerTableViewController: Error: startGame message could not be sent")
         }

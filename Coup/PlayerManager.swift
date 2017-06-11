@@ -102,7 +102,7 @@ class PlayerManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        self.handleReceivedData(data, fromPeer: peerID)
+            self.handleReceivedData(data, fromPeer: peerID)
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
@@ -121,12 +121,12 @@ class PlayerManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate
         certificateHandler(true)
     }*/
     
-    func sendData(dictionaryWithData dictionary: Dictionary<String,AnyObject>) -> Bool {
+    func sendData(dictionaryWithData dictionary: Dictionary<String,AnyObject>, toPeers peers: [MCPeerID]) -> Bool {
         let dataToSend = NSKeyedArchiver.archivedData(withRootObject: dictionary)
         
         do
         {
-            try session.send(dataToSend, toPeers: self.acceptedPeers, with: MCSessionSendDataMode.reliable)
+            try session.send(dataToSend, toPeers: peers, with: MCSessionSendDataMode.reliable)
         }
         catch
         {
@@ -138,25 +138,36 @@ class PlayerManager: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate
     
     func handleReceivedData(_ data: Data, fromPeer peerID: MCPeerID)
     {
-        let dataDictionary = NSKeyedUnarchiver.unarchiveObject(with: data) as! Dictionary<String,AnyObject>
-        let message = dataDictionary["message"]! as! String
-        
-        switch message
-        {
-            case "startGame":
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "startGame"), object: nil)
-            case "diceRoll":
-                let diceRoll = dataDictionary["roll"]! as! Int
-                
-                var receivedDiceRollDictionary = Dictionary<String,AnyObject>()
-                receivedDiceRollDictionary.updateValue(diceRoll as AnyObject, forKey: "roll")
-                receivedDiceRollDictionary.updateValue(peerID, forKey: "peerID")
-                
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "receivedDiceRoll"), object: receivedDiceRollDictionary)
-            case "dealCards":
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "dealCards"), object: nil)
-            default:
-                break
+        OperationQueue.main.addOperation { () -> Void in
+            let dataDictionary = NSKeyedUnarchiver.unarchiveObject(with: data) as! Dictionary<String,AnyObject>
+            let message = dataDictionary["message"]! as! String
+            
+            switch message
+            {
+                case "startGame":
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "startGame"), object: nil)
+                case "diceRoll":
+                    let diceRoll = dataDictionary["roll"]! as! Int
+                    
+                    var receivedDiceRollDictionary = Dictionary<String,AnyObject>()
+                    receivedDiceRollDictionary.updateValue(diceRoll as AnyObject, forKey: "roll")
+                    receivedDiceRollDictionary.updateValue(peerID, forKey: "peerID")
+                    
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "receivedDiceRoll"), object: receivedDiceRollDictionary)
+                case "dealCards":
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "dealCards"), object: nil)
+                case "playerCards":
+                    let player = dataDictionary["player"]! as! MCPeerID
+                    let playerCards = dataDictionary["cards"]! as! [Card]
+                    
+                    var receivedPlayerCardsDictionary = Dictionary<String,AnyObject>()
+                    receivedPlayerCardsDictionary.updateValue(player, forKey: "player")
+                    receivedPlayerCardsDictionary.updateValue(playerCards as AnyObject, forKey: "cards")
+                    
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "receivedPlayerCards"), object: receivedPlayerCardsDictionary)
+                default:
+                    break
+            }
         }
     }
     

@@ -16,6 +16,7 @@
 		7A99D1D01EE683EF005988DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A99D1CE1EE683EF005988DD /* Main.storyboard */; };
 		7A99D1D21EE683EF005988DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A99D1D11EE683EF005988DD /* Assets.xcassets */; };
 		7A99D1D51EE683EF005988DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A99D1D31EE683EF005988DD /* LaunchScreen.storyboard */; };
+		7ADE31531EECDA7F00D1E199 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE31521EECDA7F00D1E199 /* Card.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		7A99D1D11EE683EF005988DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7A99D1D41EE683EF005988DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7A99D1D61EE683EF005988DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7ADE31521EECDA7F00D1E199 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 		7A74F8561EE73B4C00992127 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				7ADE31521EECDA7F00D1E199 /* Card.swift */,
 				7A1E43C51EE87BDC0092C132 /* CardDealManager.swift */,
 				7A74F8571EE73B6000992127 /* ViewControllers */,
 			);
@@ -200,6 +203,7 @@
 			files = (
 				7A50C68D1EE87F8400985EEB /* CardDealViewController.swift in Sources */,
 				7A50C68F1EE87F8900985EEB /* PeerTableViewController.swift in Sources */,
+				7ADE31531EECDA7F00D1E199 /* Card.swift in Sources */,
 				7A50C6901EE87F8B00985EEB /* PlayerManager.swift in Sources */,
 				7A99D1CB1EE683EF005988DD /* AppDelegate.swift in Sources */,
 				7A50C6921EE87F9000985EEB /* HomeViewController.swift in Sources */,

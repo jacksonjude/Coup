@@ -238,6 +238,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="cardDeck" destination="P8e-cu-pte" id="6ko-YH-ZaH"/>
                         <outlet property="dealCardsButton" destination="omf-TE-QEe" id="wiq-G5-NYz"/>
                         <outlet property="tblDiceRolls" destination="h0E-vb-Xfw" id="Tj1-Uw-Ydw"/>
                     </connections>

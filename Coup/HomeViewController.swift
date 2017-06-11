@@ -23,6 +23,7 @@ class HomeViewController: UIViewController {
         {
             //Any setup before starting game search...
             appDelegate.playerManager = PlayerManager()
+            //Create new PlayerManager for a new session
         }
     }
     
@@ -34,12 +35,6 @@ class HomeViewController: UIViewController {
     @IBAction func exitGameView(_ segue: UIStoryboardSegue)
     {
         print("CoupGame-HomeViewController: Exiting Game...")
-        if segue.source is PeerTableViewController
-        {
-            let peerTableViewController = segue.source as! PeerTableViewController
-            peerTableViewController.acceptedPeersOnTable = []
-            peerTableViewController.foundPeersOnTable = []
-        }        
     }
 }
 
