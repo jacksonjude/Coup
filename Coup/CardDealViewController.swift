@@ -121,8 +121,11 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
         self.card1 = myCards[0]
         self.card2 = myCards[1]
         
-        self.card1.frame = self.cardDeck.frame
-        self.card2.frame = self.cardDeck.frame
+        self.card1.frame = self.cardDeck.bounds
+        self.card2.frame = self.cardDeck.bounds
+        
+        self.card1.center = self.cardDeck.center
+        self.card2.center = self.cardDeck.center
                     
         self.view.addSubview(self.card1)
         self.view.addSubview(self.card2)
@@ -154,27 +157,6 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
                 print("CoupGame-CardDealViewController: Error: card 2 could not glide")
             }
         })
-    }
-    
-    func imageForCard(cardName: String) -> UIImage
-    {
-        var cardImageName = ""
-        switch cardName {
-            case "Duke":
-                cardImageName = "cardJack"
-            case "Assassin":
-                cardImageName = "cardAce"
-            case "Contessa":
-                cardImageName = "cardQueen"
-            case "Ambassador":
-                cardImageName = "card10"
-            case "Captain":
-                cardImageName = "cardKing"
-            default:
-                break
-        }
-        
-        return UIImage(named: cardImageName)!
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -217,6 +199,10 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
         self.cardCanZoom = false
         
         let cardZoomScale: CGFloat = 1.5
+        let cardDecriptionFontSize: CGFloat = 25
+        let textViewAlpha: CGFloat = 0.8
+        let iconMargin: CGFloat = 5
+        let iconSize: CGFloat = 36
         
         let blurEffect = UIBlurEffect(style: .light)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
@@ -236,6 +222,39 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
             
             self.cardCanZoom = true
             
+            let actionTextView = UITextView()
+            actionTextView.frame = CGRect(x: 0, y: 0, width: card.bounds.width, height: card.bounds.height/2)
+            actionTextView.backgroundColor = UIColor.gray.withAlphaComponent(textViewAlpha)
+            actionTextView.text = card.actionInfo()
+            actionTextView.textAlignment = .center
+            actionTextView.font = UIFont.systemFont(ofSize: cardDecriptionFontSize)
+            actionTextView.textColor = UIColor.darkText
+            actionTextView.tag = 391
+            
+            card.addSubview(actionTextView)
+            
+            let actionIcon = UIImageView(image: UIImage(named: "actionIcon"))
+            actionIcon.frame = CGRect(x: iconMargin, y: card.bounds.midY-iconSize-iconMargin, width: iconSize, height: iconSize)
+            actionIcon.tag = 815
+            card.addSubview(actionIcon)
+            
+            let blockTextView = UITextView()
+            blockTextView.frame = CGRect(x: 0, y: card.bounds.midY, width: card.bounds.width, height: card.bounds.height/2)
+            blockTextView.backgroundColor = UIColor.gray.withAlphaComponent(textViewAlpha)
+            
+            blockTextView.text = card.blockInfo()
+            blockTextView.textAlignment = .center
+            blockTextView.font = UIFont.systemFont(ofSize: cardDecriptionFontSize)
+            blockTextView.textColor = UIColor.darkText
+            blockTextView.tag = 540
+            
+            card.addSubview(blockTextView)
+            
+            let blockIcon = UIImageView(image: UIImage(named: "blockIcon"))
+            blockIcon.frame = CGRect(x: iconMargin, y: card.bounds.maxY-iconSize-iconMargin, width: iconSize, height: iconSize)
+            blockIcon.tag = 316
+            card.addSubview(blockIcon)
+            
             if !finishedTransition
             {
                 print("CoupGame-CardDealViewController: Error: card could not zoom")
@@ -246,6 +265,12 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
     func animateCardZoomOut(card: Card)
     {
         self.cardCanZoom = false
+        
+        card.viewWithTag(391)!.removeFromSuperview()
+        card.viewWithTag(540)!.removeFromSuperview()
+        
+        card.viewWithTag(815)!.removeFromSuperview()
+        card.viewWithTag(316)!.removeFromSuperview()
         
         UIView.transition(with: card, duration: 1, options: .curveEaseIn, animations: {
             card.frame = self.getCardFrame(withMargin: self.cardMargin, atSide: self.cardZoomed-1, withScale: 1)

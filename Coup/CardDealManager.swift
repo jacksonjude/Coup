@@ -158,7 +158,6 @@ class CardDealManager: NSObject
                 
                 cardsAdded += 1
             }
-            //let masterDeck = [Card(type: .ambassador), Card(type: .ambassador), Card(type: .ambassador), Card(type: .ambassador), Card(type: .ambassador), Card(type: .assassin), Card(type: .assassin), Card(type: .assassin), Card(type: .assassin), Card(type: .assassin), Card(type: .captain), Card(type: .captain), Card(type: .captain), Card(type: .captain), Card(type: .captain), Card(type: .contessa), Card(type: .contessa), Card(type: .contessa), Card(type: .contessa), Card(type: .contessa), Card(type: .duke), Card(type: .duke), Card(type: .duke), Card(type: .duke), Card(type: .duke)]
             
             var shuffledMasterDeck = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: masterDeck)
             
