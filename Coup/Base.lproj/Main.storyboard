@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.17" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.14"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -178,28 +178,6 @@
                                     <constraint firstAttribute="width" constant="158" id="kjh-jh-f9m"/>
                                 </constraints>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="h0E-vb-Xfw">
-                                <rect key="frame" x="16" y="66" width="343" height="300"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="343" id="Myr-Zi-Acp"/>
-                                    <constraint firstAttribute="height" constant="300" id="rkO-gO-dhd"/>
-                                </constraints>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="idCellDiceRoll" id="UTA-e7-1CL">
-                                        <rect key="frame" x="0.0" y="28" width="343" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UTA-e7-1CL" id="Eca-7c-lyX">
-                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="JZP-hy-LcW" id="2Na-Xg-tHv"/>
-                                    <outlet property="delegate" destination="JZP-hy-LcW" id="7ma-oK-uL7"/>
-                                </connections>
-                            </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KB8-Zc-2NL">
                                 <rect key="frame" x="16" y="20" width="46" height="38"/>
                                 <constraints>
@@ -229,18 +207,31 @@
                                     <constraint firstAttribute="height" constant="37" id="luB-DE-xkP"/>
                                 </constraints>
                                 <state key="normal" title="Continue"/>
+                                <connections>
+                                    <action selector="continueToGameButtonPressed:" destination="JZP-hy-LcW" eventType="touchUpInside" id="RBO-Mo-KIa"/>
+                                </connections>
                             </button>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2tJ-ST-kVq">
+                                <rect key="frame" x="16" y="58" width="343" height="249"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="343" id="Ncv-Sp-cey"/>
+                                    <constraint firstAttribute="height" constant="249" id="STV-wz-iKx"/>
+                                </constraints>
+                                <connections>
+                                    <segue destination="NJr-ST-H53" kind="embed" id="Hj7-jE-Q0P"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" red="0.69808030128479004" green="0.69808030128479004" blue="0.69808030128479004" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="omf-TE-QEe" firstAttribute="centerX" secondItem="cZt-jp-ERM" secondAttribute="centerX" id="AJ5-kD-8Om"/>
-                            <constraint firstItem="h0E-vb-Xfw" firstAttribute="centerX" secondItem="cZt-jp-ERM" secondAttribute="centerX" id="AgO-83-X7D"/>
                             <constraint firstItem="omf-TE-QEe" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" id="C9O-tg-QX7"/>
                             <constraint firstItem="P8e-cu-pte" firstAttribute="centerX" secondItem="cZt-jp-ERM" secondAttribute="centerX" id="Ews-Lr-xB7"/>
                             <constraint firstItem="P8e-cu-pte" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" constant="46" id="Mi0-Po-AAy"/>
                             <constraint firstItem="GSf-ve-zPT" firstAttribute="top" secondItem="GHo-ws-R3i" secondAttribute="bottom" constant="256" id="Oft-ol-pIR"/>
-                            <constraint firstItem="h0E-vb-Xfw" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" constant="46" id="RNl-fI-maW"/>
+                            <constraint firstItem="2tJ-ST-kVq" firstAttribute="centerX" secondItem="cZt-jp-ERM" secondAttribute="centerX" id="Uyu-GU-KzT"/>
                             <constraint firstItem="efL-mT-4bJ" firstAttribute="trailing" secondItem="cZt-jp-ERM" secondAttribute="trailingMargin" id="YR9-z2-J2F"/>
+                            <constraint firstItem="2tJ-ST-kVq" firstAttribute="top" secondItem="omf-TE-QEe" secondAttribute="bottom" id="anF-yF-4qu"/>
                             <constraint firstItem="GHo-ws-R3i" firstAttribute="centerX" secondItem="cZt-jp-ERM" secondAttribute="centerX" id="asn-wD-xwy"/>
                             <constraint firstItem="KB8-Zc-2NL" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" id="gnf-AB-A7t"/>
                             <constraint firstItem="efL-mT-4bJ" firstAttribute="top" secondItem="KHr-Gg-Lvd" secondAttribute="bottom" id="pIu-fP-uH1"/>
@@ -249,9 +240,9 @@
                     </view>
                     <connections>
                         <outlet property="cardDeck" destination="P8e-cu-pte" id="6ko-YH-ZaH"/>
+                        <outlet property="continueToGameButton" destination="GHo-ws-R3i" id="UX0-5A-ltE"/>
                         <outlet property="dealCardsButton" destination="omf-TE-QEe" id="wiq-G5-NYz"/>
-                        <outlet property="tblDiceRolls" destination="h0E-vb-Xfw" id="Tj1-Uw-Ydw"/>
-                        <segue destination="kPF-fe-xTw" kind="show" identifier="openGameView" id="uPe-Qy-yAI"/>
+                        <segue destination="kPF-fe-xTw" kind="show" identifier="presentGameDisplay" id="lOq-9L-ggt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ips-r1-0gt" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -314,12 +305,11 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SGd-iI-w9l" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="HAf-xe-Jtk" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="3745" y="131"/>
+            <point key="canvasLocation" x="3745" y="152"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="VD7-OQ-tdz">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="GU0-D7-RGq" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="ykl-mK-Xto" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ovC-CA-rPq"/>
@@ -331,13 +321,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GU0-D7-RGq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4606" y="131"/>
+            <point key="canvasLocation" x="4604" y="-64"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="vbM-1M-dqC">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wut-N6-94Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="TJ8-jI-1lf" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RIc-40-HBl"/>
@@ -349,13 +339,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wut-N6-94Y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4606" y="362"/>
+            <point key="canvasLocation" x="4604" y="151"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="TOW-Ax-2Du">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jNM-TJ-kXM" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="d9J-DJ-2Ex" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CNh-Ol-mkz"/>
@@ -367,8 +357,56 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jNM-TJ-kXM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4607" y="-98"/>
+            <point key="canvasLocation" x="4604" y="383"/>
+        </scene>
+        <!--Dice Roll Table View Controller-->
+        <scene sceneID="hiv-n1-chU">
+            <objects>
+                <viewController id="NJr-ST-H53" customClass="DiceRollTableViewController" customModule="Coup" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="AZr-gv-efc"/>
+                        <viewControllerLayoutGuide type="bottom" id="q55-Sm-oVK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ova-7P-cRu">
+                        <rect key="frame" x="0.0" y="0.0" width="343" height="249"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BNX-eg-PWZ">
+                                <rect key="frame" x="0.0" y="0.0" width="343" height="249"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="idCellDiceRoll" id="GkH-6F-f6r">
+                                        <rect key="frame" x="0.0" y="28" width="343" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GkH-6F-f6r" id="foU-F1-Alc">
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="NJr-ST-H53" id="qAj-R9-m9I"/>
+                                    <outlet property="delegate" destination="NJr-ST-H53" id="tiY-Uq-sJ7"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="BNX-eg-PWZ" secondAttribute="bottom" id="QOR-9c-kzG"/>
+                            <constraint firstItem="BNX-eg-PWZ" firstAttribute="leading" secondItem="ova-7P-cRu" secondAttribute="leading" id="WFs-52-xou"/>
+                            <constraint firstAttribute="trailing" secondItem="BNX-eg-PWZ" secondAttribute="trailing" id="YUM-9H-yRW"/>
+                            <constraint firstItem="BNX-eg-PWZ" firstAttribute="top" secondItem="ova-7P-cRu" secondAttribute="top" id="ecT-vD-ePl"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tblDiceRolls" destination="BNX-eg-PWZ" id="DF1-gu-Lqw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dNO-nz-mHX" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3110" y="-36"/>
         </scene>
     </scenes>
     <resources>

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Card: UIImageView
+class Card: NSObject, NSCoding
 {
     enum CardType: Int
     {
@@ -25,20 +25,16 @@ class Card: UIImageView
     
     init(type: Int)
     {
-        super.init(image: UIImage(named: "cardBack"))
+        super.init()
         
         self.cardType = CardType(rawValue: type)!
-        
-        self.image = UIImage(named: "cardBack")
     }
     
     init(type: CardType)
     {
-        super.init(image: UIImage(named: "cardBack"))
+        super.init()
         
         self.cardType = type
-        
-        self.image = UIImage(named: "cardBack")
     }
     
     func getImage() -> UIImage
@@ -107,24 +103,12 @@ class Card: UIImageView
         }
     }
     
-    func flip()
-    {
-        if !flipped
-        {
-            self.image = getImage()
-        }
-        else
-        {
-            self.image = UIImage(named: "cardBack")
-        }
-    }
-    
-    override func encode(with aCoder: NSCoder) {
+    func encode(with aCoder: NSCoder) {
         aCoder.encode(cardType.rawValue, forKey: "cardType")
     }
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        super.init()
         self.cardType = CardType(rawValue: aDecoder.decodeInteger(forKey: "cardType"))!
     }
 }

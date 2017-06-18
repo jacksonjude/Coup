@@ -16,6 +16,7 @@
 		7A99D1D01EE683EF005988DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A99D1CE1EE683EF005988DD /* Main.storyboard */; };
 		7A99D1D21EE683EF005988DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A99D1D11EE683EF005988DD /* Assets.xcassets */; };
 		7A99D1D51EE683EF005988DD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A99D1D31EE683EF005988DD /* LaunchScreen.storyboard */; };
+		7AB6DFBA1EF5BB0400AB4B0A /* DiceRollTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB6DFB91EF5BB0400AB4B0A /* DiceRollTableViewController.swift */; };
 		7ADE31531EECDA7F00D1E199 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ADE31521EECDA7F00D1E199 /* Card.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		7A99D1D11EE683EF005988DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7A99D1D41EE683EF005988DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7A99D1D61EE683EF005988DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AB6DFB91EF5BB0400AB4B0A /* DiceRollTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiceRollTableViewController.swift; sourceTree = "<group>"; };
 		7ADE31521EECDA7F00D1E199 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,28 +63,36 @@
 			name = ViewControllers;
 			sourceTree = "<group>";
 		};
+		7A42F1D81EF662B200C312AD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7ADE31521EECDA7F00D1E199 /* Card.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		7A42F1D91EF662BC00C312AD /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				7A1E43C51EE87BDC0092C132 /* CardDealManager.swift */,
+			);
+			name = Managers;
+			sourceTree = "<group>";
+		};
 		7A74F8501EE72A7F00992127 /* Connection */ = {
 			isa = PBXGroup;
 			children = (
 				7A1E43C11EE87BBA0092C132 /* PlayerManager.swift */,
-				7A74F8511EE72AA100992127 /* ViewControllers */,
-			);
-			name = Connection;
-			sourceTree = "<group>";
-		};
-		7A74F8511EE72AA100992127 /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
 				7A1E43C21EE87BC80092C132 /* PeerTableViewController.swift */,
 			);
-			name = ViewControllers;
+			name = Connection;
 			sourceTree = "<group>";
 		};
 		7A74F8561EE73B4C00992127 /* Game */ = {
 			isa = PBXGroup;
 			children = (
-				7ADE31521EECDA7F00D1E199 /* Card.swift */,
-				7A1E43C51EE87BDC0092C132 /* CardDealManager.swift */,
+				7A42F1D91EF662BC00C312AD /* Managers */,
+				7A42F1D81EF662B200C312AD /* Model */,
 				7A74F8571EE73B6000992127 /* ViewControllers */,
 			);
 			name = Game;
@@ -92,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				7A1E43C41EE87BD90092C132 /* CardDealViewController.swift */,
+				7AB6DFB91EF5BB0400AB4B0A /* DiceRollTableViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -204,6 +215,7 @@
 				7A50C68D1EE87F8400985EEB /* CardDealViewController.swift in Sources */,
 				7A50C68F1EE87F8900985EEB /* PeerTableViewController.swift in Sources */,
 				7ADE31531EECDA7F00D1E199 /* Card.swift in Sources */,
+				7AB6DFBA1EF5BB0400AB4B0A /* DiceRollTableViewController.swift in Sources */,
 				7A50C6901EE87F8B00985EEB /* PlayerManager.swift in Sources */,
 				7A99D1CB1EE683EF005988DD /* AppDelegate.swift in Sources */,
 				7A50C6921EE87F9000985EEB /* HomeViewController.swift in Sources */,

@@ -9,18 +9,21 @@
 import UIKit
 import MultipeerConnectivity
 
-class CardDealViewController: UIViewController, UITableViewDelegate, UITableViewDataSource
+class CardDealViewController: UIViewController
 {
     var cardDealManager: CardDealManager!
+    var diceRollTableViewController: DiceRollTableViewController!
     
-    @IBOutlet weak var tblDiceRolls: UITableView!
     @IBOutlet weak var dealCardsButton: UIButton!
     @IBOutlet weak var cardDeck: UIImageView!
+    @IBOutlet weak var continueToGameButton: UIButton!
     
     var diceRollInfo = Array<String>()
     
-    var card1 = Card(type: .none)
-    var card2 = Card(type: .none)
+    var card1: UIImageView!
+    var card2: UIImageView!
+    
+    var myCards: Array<Card>!
     
     var cardZoomed = 0
     var cardCanZoom = false
@@ -31,6 +34,9 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
     {
         super.viewDidLoad()
         self.disableDealButton()
+        
+        self.continueToGameButton.isHidden = true
+        self.continueToGameButton.isEnabled = false
         
         self.cardDealManager = CardDealManager(viewController: self)
     }
@@ -44,7 +50,7 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
         diceRollInfo.append(diceRoll)
         
         OperationQueue.main.addOperation { () -> Void in
-            self.tblDiceRolls.reloadData()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadDiceRollTable"), object: self.diceRollInfo)
         }
     }
     
@@ -60,16 +66,7 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
     
     func hideDiceRollTableView()
     {
-        OperationQueue.main.addOperation { () -> Void in
-            UIView.transition(with: self.tblDiceRolls, duration: 0.25, options: .transitionCrossDissolve, animations: {
-                self.tblDiceRolls.isHidden = true
-            }, completion: { (finishedTransition) in
-                if !finishedTransition
-                {
-                    print("CoupGame-CardDealViewController: Error: tblDiceRolls could not fade out")
-                }
-            })
-        }
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "hideDiceRollTable"), object: self.diceRollInfo)
     }
     
     //MARK: Card Deal
@@ -115,11 +112,23 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
         return CGRect(origin: origin, size: size)
     }
     
+    func flipCard(cardImageView: UIImageView, card: Card)
+    {
+        if !card.flipped
+        {
+            cardImageView.image = card.getImage()
+        }
+        else
+        {
+            cardImageView.image = UIImage(named: "cardBack")
+        }
+    }
+    
     func animateCardDeal()
     {
-        let myCards = self.cardDealManager.appDelegate.playerCards[self.cardDealManager.appDelegate.playerManager.peer]!
-        self.card1 = myCards[0]
-        self.card2 = myCards[1]
+        self.myCards = self.cardDealManager.appDelegate.playerCards[self.cardDealManager.appDelegate.playerManager.peer]!
+        self.card1 = UIImageView(image: UIImage(named: "cardBack"))
+        self.card2 = UIImageView(image: UIImage(named: "cardBack"))
         
         self.card1.frame = self.cardDeck.bounds
         self.card2.frame = self.cardDeck.bounds
@@ -130,11 +139,11 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
         self.view.addSubview(self.card1)
         self.view.addSubview(self.card2)
         
-        UIView.transition(with: self.card1, duration: 1, options: .curveEaseIn, animations: {
+        UIView.transition(with: self.card1, duration: 3, options: .curveEaseInOut, animations: {
             self.card1.frame = self.getCardFrame(withMargin: self.cardMargin, atSide: 0, withScale: 1)
         }, completion: { (finishedTransition) in
             
-            self.card1.flip()
+            self.flipCard(cardImageView: self.card1, card: self.myCards[0])
             
             self.cardCanZoom = true
             
@@ -144,13 +153,16 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
             }
         })
         
-        UIView.transition(with: self.card2, duration: 1, options: .curveEaseIn, animations: {
+        UIView.transition(with: self.card2, duration: 3, options: .curveEaseInOut, animations: {
             self.card2.frame = self.getCardFrame(withMargin: self.cardMargin, atSide: 1, withScale: 1)
         }, completion: { (finishedTransition) in
             
-            self.card2.flip()
+            self.flipCard(cardImageView: self.card2, card: self.myCards[1])
             
             self.cardCanZoom = true
+            
+            self.continueToGameButton.isHidden = false
+            self.continueToGameButton.isEnabled = true
             
             if !finishedTransition
             {
@@ -167,14 +179,14 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
             {
                 if self.card1.frame.contains(touches.first!.location(in: self.view))
                 {
-                    self.animateCardZoom(card: self.card1)
+                    self.animateCardZoom(cardImageView: self.card1, card: self.myCards[0])
                     
                     self.cardZoomed = 1
                 }
                 
                 if self.card2.frame.contains(touches.first!.location(in: self.view))
                 {
-                    self.animateCardZoom(card: self.card2)
+                    self.animateCardZoom(cardImageView: self.card2, card: self.myCards[1])
                     
                     self.cardZoomed = 2
                 }
@@ -183,18 +195,18 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
             {
                 if cardZoomed == 1
                 {
-                    self.animateCardZoomOut(card: self.card1)
+                    self.animateCardZoomOut(cardImageView: self.card1, card: self.myCards[0])
                 }
                 
                 if cardZoomed == 2
                 {
-                    self.animateCardZoomOut(card: self.card2)
+                    self.animateCardZoomOut(cardImageView: self.card2, card: self.myCards[1])
                 }
             }
         }
     }
     
-    func animateCardZoom(card: Card)
+    func animateCardZoom(cardImageView: UIImageView, card: Card)
     {
         self.cardCanZoom = false
         
@@ -212,48 +224,51 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.view.addSubview(blurEffectView)
         
-        self.view.bringSubview(toFront: card)
+        self.view.bringSubview(toFront: cardImageView)
         
-        UIView.transition(with: card, duration: 1, options: .curveEaseIn, animations: {
-            card.frame.size.width = card.frame.size.width*cardZoomScale
-            card.frame.size.height = card.frame.size.height*cardZoomScale
-            card.center = self.view.center
+        UIView.transition(with: cardImageView, duration: 1, options: .curveEaseInOut, animations: {
+            cardImageView.frame.size.width = cardImageView.frame.size.width*cardZoomScale
+            cardImageView.frame.size.height = cardImageView.frame.size.height*cardZoomScale
+            cardImageView.center = self.view.center
         }, completion: { (finishedTransition) in
             
             self.cardCanZoom = true
             
             let actionTextView = UITextView()
-            actionTextView.frame = CGRect(x: 0, y: 0, width: card.bounds.width, height: card.bounds.height/2)
+            actionTextView.frame = CGRect(x: 0, y: 0, width: cardImageView.bounds.width, height: cardImageView.bounds.height/2)
             actionTextView.backgroundColor = UIColor.gray.withAlphaComponent(textViewAlpha)
+            
             actionTextView.text = card.actionInfo()
             actionTextView.textAlignment = .center
             actionTextView.font = UIFont.systemFont(ofSize: cardDecriptionFontSize)
             actionTextView.textColor = UIColor.darkText
+            actionTextView.isEditable = false
             actionTextView.tag = 391
             
-            card.addSubview(actionTextView)
+            cardImageView.addSubview(actionTextView)
             
             let actionIcon = UIImageView(image: UIImage(named: "actionIcon"))
-            actionIcon.frame = CGRect(x: iconMargin, y: card.bounds.midY-iconSize-iconMargin, width: iconSize, height: iconSize)
+            actionIcon.frame = CGRect(x: iconMargin, y: cardImageView.bounds.midY-iconSize-iconMargin, width: iconSize, height: iconSize)
             actionIcon.tag = 815
-            card.addSubview(actionIcon)
+            cardImageView.addSubview(actionIcon)
             
             let blockTextView = UITextView()
-            blockTextView.frame = CGRect(x: 0, y: card.bounds.midY, width: card.bounds.width, height: card.bounds.height/2)
+            blockTextView.frame = CGRect(x: 0, y: cardImageView.bounds.midY, width: cardImageView.bounds.width, height: cardImageView.bounds.height/2)
             blockTextView.backgroundColor = UIColor.gray.withAlphaComponent(textViewAlpha)
             
             blockTextView.text = card.blockInfo()
             blockTextView.textAlignment = .center
             blockTextView.font = UIFont.systemFont(ofSize: cardDecriptionFontSize)
             blockTextView.textColor = UIColor.darkText
+            blockTextView.isEditable = false
             blockTextView.tag = 540
             
-            card.addSubview(blockTextView)
+            cardImageView.addSubview(blockTextView)
             
             let blockIcon = UIImageView(image: UIImage(named: "blockIcon"))
-            blockIcon.frame = CGRect(x: iconMargin, y: card.bounds.maxY-iconSize-iconMargin, width: iconSize, height: iconSize)
+            blockIcon.frame = CGRect(x: iconMargin, y: cardImageView.bounds.maxY-iconSize-iconMargin, width: iconSize, height: iconSize)
             blockIcon.tag = 316
-            card.addSubview(blockIcon)
+            cardImageView.addSubview(blockIcon)
             
             if !finishedTransition
             {
@@ -262,18 +277,18 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
         })
     }
     
-    func animateCardZoomOut(card: Card)
+    func animateCardZoomOut(cardImageView: UIImageView, card: Card)
     {
         self.cardCanZoom = false
         
-        card.viewWithTag(391)!.removeFromSuperview()
-        card.viewWithTag(540)!.removeFromSuperview()
+        cardImageView.viewWithTag(391)!.removeFromSuperview()
+        cardImageView.viewWithTag(540)!.removeFromSuperview()
         
-        card.viewWithTag(815)!.removeFromSuperview()
-        card.viewWithTag(316)!.removeFromSuperview()
+        cardImageView.viewWithTag(815)!.removeFromSuperview()
+        cardImageView.viewWithTag(316)!.removeFromSuperview()
         
-        UIView.transition(with: card, duration: 1, options: .curveEaseIn, animations: {
-            card.frame = self.getCardFrame(withMargin: self.cardMargin, atSide: self.cardZoomed-1, withScale: 1)
+        UIView.transition(with: cardImageView, duration: 1, options: .curveEaseInOut, animations: {
+            cardImageView.frame = self.getCardFrame(withMargin: self.cardMargin, atSide: self.cardZoomed-1, withScale: 1)
         }, completion: { (finishedTransition) in
             
             self.cardZoomed = 0
@@ -289,27 +304,8 @@ class CardDealViewController: UIViewController, UITableViewDelegate, UITableView
         })
     }
     
-    //MARK: UITableView related method implementation
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return diceRollInfo.count
-    }
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    @IBAction func continueToGameButtonPressed(_ sender: Any)
     {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "idCellDiceRoll", for: indexPath) as UITableViewCell
-        cell.textLabel?.text = diceRollInfo[indexPath.row]
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60.0
+        self.performSegue(withIdentifier: "presentGameDisplay", sender: self)
     }
 }
