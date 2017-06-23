@@ -32,6 +32,12 @@ class CardDealManager: NSObject
         self.myPeerID = appDelegate.playerManager.peer
         self.playerCount = appDelegate.playerManager.acceptedPeers.count+1
         
+        for peer in appDelegate.playerManager.acceptedPeers
+        {
+            appDelegate.playerCoins.updateValue(2, forKey: peer)
+        }
+        appDelegate.playerCoins.updateValue(2, forKey: myPeerID)
+        
         NotificationCenter.default.addObserver(self, selector:#selector(self.receivedDiceRoll), name: Notification.Name(rawValue: "receivedDiceRoll"), object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(self.dealCards), name: Notification.Name(rawValue: "dealCards"), object: nil)
         NotificationCenter.default.addObserver(self, selector:#selector(self.handleReceivedPlayerCards), name: Notification.Name(rawValue: "receivedPlayerCards"), object: nil)

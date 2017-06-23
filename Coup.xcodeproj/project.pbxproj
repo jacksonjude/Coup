@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A24C0751EF8ADFB006B9EB7 /* PlayerStatusCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A24C0741EF8ADFB006B9EB7 /* PlayerStatusCollectionViewController.swift */; };
 		7A50C68D1EE87F8400985EEB /* CardDealViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C41EE87BD90092C132 /* CardDealViewController.swift */; };
 		7A50C68E1EE87F8700985EEB /* CardDealManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C51EE87BDC0092C132 /* CardDealManager.swift */; };
 		7A50C68F1EE87F8900985EEB /* PeerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C21EE87BC80092C132 /* PeerTableViewController.swift */; };
 		7A50C6901EE87F8B00985EEB /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C11EE87BBA0092C132 /* PlayerManager.swift */; };
 		7A50C6921EE87F9000985EEB /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A1E43C31EE87BCB0092C132 /* HomeViewController.swift */; };
+		7A928A0E1EF861C400A008D9 /* PlayerStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A928A0D1EF861C400A008D9 /* PlayerStatusViewController.swift */; };
 		7A99D1CB1EE683EF005988DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A99D1CA1EE683EF005988DD /* AppDelegate.swift */; };
 		7A99D1D01EE683EF005988DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7A99D1CE1EE683EF005988DD /* Main.storyboard */; };
 		7A99D1D21EE683EF005988DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7A99D1D11EE683EF005988DD /* Assets.xcassets */; };
@@ -26,6 +28,8 @@
 		7A1E43C31EE87BCB0092C132 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HomeViewController.swift; path = Coup/HomeViewController.swift; sourceTree = SOURCE_ROOT; };
 		7A1E43C41EE87BD90092C132 /* CardDealViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDealViewController.swift; sourceTree = "<group>"; };
 		7A1E43C51EE87BDC0092C132 /* CardDealManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDealManager.swift; sourceTree = "<group>"; };
+		7A24C0741EF8ADFB006B9EB7 /* PlayerStatusCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStatusCollectionViewController.swift; sourceTree = "<group>"; };
+		7A928A0D1EF861C400A008D9 /* PlayerStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerStatusViewController.swift; sourceTree = "<group>"; };
 		7A99D1C71EE683EF005988DD /* Coup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Coup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A99D1CA1EE683EF005988DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7A99D1CF1EE683EF005988DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -103,6 +107,8 @@
 			children = (
 				7A1E43C41EE87BD90092C132 /* CardDealViewController.swift */,
 				7AB6DFB91EF5BB0400AB4B0A /* DiceRollTableViewController.swift */,
+				7A928A0D1EF861C400A008D9 /* PlayerStatusViewController.swift */,
+				7A24C0741EF8ADFB006B9EB7 /* PlayerStatusCollectionViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -217,6 +223,8 @@
 				7ADE31531EECDA7F00D1E199 /* Card.swift in Sources */,
 				7AB6DFBA1EF5BB0400AB4B0A /* DiceRollTableViewController.swift in Sources */,
 				7A50C6901EE87F8B00985EEB /* PlayerManager.swift in Sources */,
+				7A928A0E1EF861C400A008D9 /* PlayerStatusViewController.swift in Sources */,
+				7A24C0751EF8ADFB006B9EB7 /* PlayerStatusCollectionViewController.swift in Sources */,
 				7A99D1CB1EE683EF005988DD /* AppDelegate.swift in Sources */,
 				7A50C6921EE87F9000985EEB /* HomeViewController.swift in Sources */,
 				7A50C68E1EE87F8700985EEB /* CardDealManager.swift in Sources */,

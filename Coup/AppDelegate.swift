@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var playerManager: PlayerManager!
     var playerOrder: Array<MCPeerID>!
     var playerCards = Dictionary<MCPeerID,Array<Card>>()
+    var playerCoins = Dictionary<MCPeerID,Int>()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
